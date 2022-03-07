@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -11,69 +11,85 @@ const Register = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		setError,
+		clearErrors,
 	} = useForm({
 		defaultValues: { email: "", password: "", password_confirm: "" },
 	});
 
-	// useEffect(() => {
-	// 	createUserWithEmailAndPassword(auth, email, password)
-	// 		.then((userCredential) => {
-	// 			// Signed in
-	// 			const user = userCredential.user;
-	// 			// ...
-	// 		})
-	// 		.catch((error) => {
-	// 			const errorCode = error.code;
-	// 			const errorMessage = error.message;
-	// 			// ..
-	// 		});
-	// }, []);
-
-	useEffect(() => {
-		console.log(errors);
-	}, [errors]);
-
-	const test = (data) => {
-		console.log(data);
+	const submitHandler = (data) => {
+		if (data.password !== data.password_confirm) {
+			setError("password", {
+				message: "Passwords must match!",
+			});
+		} else {
+			createUserWithEmailAndPassword(auth, data.email, data.password)
+				.then((userCredential) => {
+					// Signed in
+					const user = userCredential.user;
+					// ...
+				})
+				.catch((error) => {
+					const errorCode = error.code;
+					const errorMessage = error.message;
+					// ..
+				});
+		}
 	};
+
+	console.log(errors);
 
 	return (
 		<Container>
 			<Wrap>
 				<form
 					onSubmit={handleSubmit((data) => {
-						test(data);
+						submitHandler(data);
 					})}
 				>
-					<div>
+					<InputWrap className={errors?.email?.message ? "error" : ""}>
 						<input
-							{...register("email", { required: "This is required" })}
+							{...register("email", {
+								required: "Email is required",
+							})}
 							placeholder="Email"
 							name="email"
 							type="email"
+							onFocus={() => clearErrors("email")}
 						/>
-					</div>
-					<div>
+						<span className="err-mess">{errors?.email?.message}</span>
+					</InputWrap>
+					<InputWrap className={errors?.password?.message ? "error" : ""}>
 						<input
 							{...register("password", {
-								required: "This is required",
+								required: "Password is required",
 							})}
 							placeholder="Password"
 							name="password"
 							type="password"
+							onFocus={() => clearErrors("password")}
 						/>
-					</div>
-
-					<input
-						{...register("password_confirm", {
-							required: "This is required",
-						})}
-						placeholder="Confirm password"
-						name="password_confirm"
-						type="password"
-					/>
+						<span className="err-mess">{errors?.password?.message}</span>
+					</InputWrap>
+					<InputWrap
+						className={errors?.password_confirm?.message ? "error" : ""}
+					>
+						<input
+							{...register("password_confirm", {
+								required: "Confirm your password",
+							})}
+							placeholder="Confirm password"
+							name="password_confirm"
+							type="password"
+							onFocus={() => clearErrors("password_confirm")}
+						/>
+						<span className="err-mess">
+							{errors?.password_confirm?.message}
+						</span>
+					</InputWrap>
 					<button type="submit">Submit</button>
 				</form>
+
 				<LinkWrap>
 					<Link to="/">Back to Login</Link>
 				</LinkWrap>
@@ -107,12 +123,6 @@ const Wrap = styled.div`
 		flex-direction: column;
 		gap: 20px;
 
-		input {
-			padding: 4px;
-			font-size: 14px;
-			width: 100%;
-		}
-
 		button {
 			border-radius: 8px;
 			border: none;
@@ -121,6 +131,43 @@ const Wrap = styled.div`
 			color: #fff;
 			font-size: 14px;
 			letter-spacing: 1.5px;
+		}
+	}
+`;
+
+const InputWrap = styled.div`
+	position: relative;
+
+	input {
+		padding: 4px;
+		font-size: 14px;
+		width: 100%;
+		border-radius: 8px;
+	}
+
+	span {
+		position: absolute;
+		font-size: 12px;
+		bottom: 9px;
+		right: 6px;
+		opacity: 0;
+		color: #fff;
+		line-height: 1;
+		transition: all 0.3s;
+	}
+
+	&.error {
+		input {
+			padding: 4px;
+			font-size: 14px;
+			width: 100%;
+			position: relative;
+			color: #fff;
+			background-color: rgba(204, 0, 0, 0.4);
+		}
+
+		span {
+			opacity: 1;
 		}
 	}
 `;
