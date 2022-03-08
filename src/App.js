@@ -6,6 +6,7 @@ import { Counter } from "./features/counter/Counter";
 import Home from "./pages/Home";
 import Welcome from "./pages/Welcome";
 import Register from "./features/register/Register";
+import Login from "./features/login/Login";
 
 //process.env.REACT_APP_NOT_SECRET_CODE
 
@@ -20,9 +21,11 @@ function App() {
 				<div></div>
 			</Nav>
 			<Routes>
-				<Route path="/" element={<Welcome />} />
-				<Route path="/register" element={<Register />} />
-				<Route path="/counter" element={<Counter />} />
+				<Route index element={<Home />} />
+				<Route path="login" element={<Login />} />
+				<Route path="" element={<Home />} />
+				<Route path="register" element={<Register />} />
+				<Route path="counter" element={<Counter />} />
 			</Routes>
 		</>
 	);

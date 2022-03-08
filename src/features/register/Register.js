@@ -3,10 +3,14 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useDispatch } from "react-redux";
 
 import { auth } from "../../app/firebase";
+import { setUserLoginDetails } from "../user/userSlice";
 
 const Register = () => {
+	const dispatch = useDispatch();
+
 	const {
 		register,
 		handleSubmit,
@@ -27,6 +31,7 @@ const Register = () => {
 				.then((userCredential) => {
 					// Signed in
 					const user = userCredential.user;
+					setUser(user);
 					// ...
 				})
 				.catch((error) => {
@@ -37,7 +42,13 @@ const Register = () => {
 		}
 	};
 
-	console.log(errors);
+	const setUser = (user) => {
+		dispatch(
+			setUserLoginDetails({
+				email: user.email,
+			})
+		);
+	};
 
 	return (
 		<Container>
@@ -91,7 +102,7 @@ const Register = () => {
 				</form>
 
 				<LinkWrap>
-					<Link to="/">Back to Login</Link>
+					<Link to="/login">Back to Login</Link>
 				</LinkWrap>
 			</Wrap>
 		</Container>
@@ -107,7 +118,8 @@ const Container = styled.div`
 `;
 
 const Wrap = styled.div`
-	margin-top: 40px;
+	margin-top: 60px;
+	padding: 40px;
 	width: 100%;
 	max-width: 420px;
 	min-height: 500px;
@@ -124,6 +136,7 @@ const Wrap = styled.div`
 		gap: 20px;
 
 		button {
+			cursor: pointer;
 			border-radius: 8px;
 			border: none;
 			padding: 12px 14px;
