@@ -4,48 +4,29 @@ import styled from "styled-components";
 
 import { Counter } from "./features/counter/Counter";
 import Home from "./pages/Home";
-import Welcome from "./pages/Welcome";
-import Register from "./features/register/Register";
-import Login from "./features/login/Login";
+import Register from "./features/auth/register/Register";
+import Login from "./features/auth/login/Login";
+import Header from "./features/nav/Header";
 
 //process.env.REACT_APP_NOT_SECRET_CODE
 
 function App() {
 	return (
 		<>
-			<Nav>
-				<nav>
-					<Link to="/">Home</Link>
-					<Link to="/counter">Counter</Link>
-				</nav>
-				<div></div>
-			</Nav>
+			<Header>
+				<Link to="/">Home</Link>
+				<Link to="/counter">Counter</Link>
+				<Link to="/login">Login</Link>
+			</Header>
 			<Routes>
 				<Route index element={<Home />} />
-				<Route path="login" element={<Login />} />
 				<Route path="" element={<Home />} />
+				<Route path="login" element={<Login />} />
 				<Route path="register" element={<Register />} />
 				<Route path="counter" element={<Counter />} />
 			</Routes>
 		</>
 	);
 }
-
-const Nav = styled.div`
-	nav {
-		position: fixed;
-		top: 0;
-		left: 0;
-		height: 60px;
-		background-color: #233423;
-		width: 100%;
-	}
-
-	// PLACEHOLDER
-	div {
-		position: relative;
-		height: 60px;
-	}
-`;
 
 export default App;

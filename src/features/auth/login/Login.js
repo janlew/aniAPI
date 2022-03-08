@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
-import { auth } from "../../app/firebase";
-import { setUserLoginDetails } from "../user/userSlice";
+import { auth } from "../../../app/firebase";
+import { setUserLoginDetails } from "../userSlice";
 
 const Login = () => {
 	const dispatch = useDispatch();

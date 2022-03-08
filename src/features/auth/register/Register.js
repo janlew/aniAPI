@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
 
-import { auth } from "../../app/firebase";
-import { setUserLoginDetails } from "../user/userSlice";
+import { auth } from "../../../app/firebase";
+import { setUserLoginDetails } from "../userSlice";
 
 const Register = () => {
 	const dispatch = useDispatch();

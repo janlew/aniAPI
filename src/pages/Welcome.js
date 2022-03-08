@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import Login from "../features/login/Login";
+import Login from "../features/auth/login/Login";
 
 const Welcome = () => {
 	return (
