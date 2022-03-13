@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
@@ -9,6 +9,7 @@ import { setUserLoginDetails } from "../userSlice";
 
 const Login = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const {
 		register,
@@ -27,7 +28,14 @@ const Login = () => {
 				.then((userCredential) => {
 					// Signed in
 					const user = userCredential.user;
-					setUser(user);
+
+					dispatch(
+						setUserLoginDetails({
+							email: user.email,
+						})
+					);
+
+					navigate("/");
 					// ...
 				})
 				.catch((error) => {
@@ -35,14 +43,6 @@ const Login = () => {
 					const errorMessage = error.message;
 				});
 		}
-	};
-
-	const setUser = (user) => {
-		dispatch(
-			setUserLoginDetails({
-				email: user.email,
-			})
-		);
 	};
 
 	return (

@@ -26,9 +26,8 @@ const Home = () => {
 };
 
 const Container = styled.div`
-	img {
-		width: 100%;
-	}
+	min-height: 100%;
+	background: #234522;
 `;
 
 export default Home;
