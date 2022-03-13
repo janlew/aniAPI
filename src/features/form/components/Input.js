@@ -1,48 +1,51 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const Input = ({ register, name, rules, errors, ...rest }) => {
 	return (
-		<InputWrap className={errors?.message ? "error" : ""}>
+		<InputWrap errors={errors?.message}>
 			<input {...register(name, rules)} {...rest} />
-			<span>{errors?.message}</span>
 		</InputWrap>
 	);
 };
 
 const InputWrap = styled.div`
 	position: relative;
+	border: 1px solid ${(props) => (props.errors ? "#ff4d6d" : "transparent")};
+	border-radius: 8px;
+	margin-bottom: 0px;
+	transition: all 0.3s ease-in-out;
+
+	${(props) =>
+		props.errors &&
+		css`
+			margin-bottom: 4px;
+		`};
 
 	input {
-		padding: 4px;
+		position: relative;
+		padding: 6px 4px;
 		font-size: 14px;
 		width: 100%;
+		border: none;
 		border-radius: 8px;
 	}
 
-	span {
+	&:after {
+		content: "${(props) => (props.errors ? props.errors : "")}";
+		font-size: 14px;
 		position: absolute;
-		font-size: 12px;
-		bottom: 9px;
-		right: 6px;
+		width: 100%;
+		bottom: -20px;
+		left: 0;
+		color: #ff4d6d;
 		opacity: 0;
-		color: #fff;
-		line-height: 1;
-		transition: all 0.3s;
-	}
+		transition: all 0.3s ease-in-out;
 
-	&.error {
-		input {
-			padding: 4px;
-			font-size: 14px;
-			width: 100%;
-			position: relative;
-			color: #fff;
-			background-color: rgba(204, 0, 0, 0.4);
-		}
-
-		span {
-			opacity: 1;
-		}
+		${(props) =>
+			props.errors &&
+			css`
+				opacity: 1;
+			`};
 	}
 `;
 
