@@ -3,11 +3,11 @@ import styled from "styled-components";
 import * as style from "../../app/styled-variables";
 
 const Container = (props) => {
-	return <Main>{props.children}</Main>;
+	return <Body>{props.children}</Body>;
 };
 
-const Main = styled.div`
-	height: 100%;
+const Body = styled.div`
+	min-height: 100%;
 	width: 100%;
 	display: flex;
 	justify-content: center;

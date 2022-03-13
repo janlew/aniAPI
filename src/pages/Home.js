@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import aniAPI from "../app/aniAPI";
 
+import Container from "../features/ui/Container";
 import ImageBanner from "../features/ui/ImageBanner";
 
 const Home = () => {
@@ -24,10 +25,5 @@ const Home = () => {
 		</Container>
 	);
 };
-
-const Container = styled.div`
-	min-height: 100%;
-	background: #234522;
-`;
 
 export default Home;

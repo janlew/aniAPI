@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { signOut } from "firebase/auth";
 
+import * as style from "../../app/styled-variables";
 import { selectUserEmail, setSignOutState } from "../auth/userSlice";
 import { auth } from "../../app/firebase";
 
@@ -55,7 +56,7 @@ const Nav = styled.nav`
 	top: 0;
 	left: 0;
 	height: 60px;
-	background-color: #233423;
+	background-color: ${style.HEADER_BG_COLOR};
 	width: 100%;
 	z-index: 100;
 	display: flex;

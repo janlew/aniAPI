@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import * as style from "../../../app/styled-variables";
+
 const Input = ({ register, name, rules, errors, ...rest }) => {
 	return (
 		<InputWrap errors={errors?.message}>
@@ -10,7 +12,8 @@ const Input = ({ register, name, rules, errors, ...rest }) => {
 
 const InputWrap = styled.div`
 	position: relative;
-	border: 1px solid ${(props) => (props.errors ? "#ff4d6d" : "transparent")};
+	border: 1px solid
+		${(props) => (props.errors ? style.ERROR_RED : "transparent")};
 	border-radius: 8px;
 	margin-bottom: 0px;
 	transition: all 0.3s ease-in-out;
@@ -37,7 +40,7 @@ const InputWrap = styled.div`
 		width: 100%;
 		bottom: -20px;
 		left: 0;
-		color: #ff4d6d;
+		color: ${style.ERROR_RED};
 		opacity: 0;
 		transition: all 0.3s ease-in-out;
 

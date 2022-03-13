@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
+import * as style from "../../../app/styled-variables";
 import { auth } from "../../../app/firebase";
 import { setUserLoginDetails } from "../userSlice";
 
@@ -88,7 +89,7 @@ const Wrap = styled.div`
 	max-width: 420px;
 	min-height: 500px;
 	height: 500px;
-	background-color: #212125;
+	background-color: ${style.WRAP_BG_COLOR};
 	border-radius: 14px;
 `;
 
