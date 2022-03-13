@@ -1,13 +1,7 @@
-import {
-	Routes,
-	Route,
-	NavLink,
-	Navigate,
-	useNavigate,
-} from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { selectUserEmail } from "../auth/userSlice";
+import { selectUserEmail } from "./userSlice";
 
 const ProtectedRoute = ({ children }) => {
 	const isAuth = useSelector(selectUserEmail);

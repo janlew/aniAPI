@@ -1,76 +1,60 @@
 import styled from "styled-components";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 import { auth } from "../../../app/firebase";
 import { setUserLoginDetails } from "../userSlice";
+
+import Container from "../../ui/Container";
+import Button from "../../ui/Button";
+import Form from "../../form/Form";
+import Input from "../../form/components/Input";
 
 const Login = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		setError,
-		clearErrors,
-	} = useForm({
-		defaultValues: { email: "", password: "" },
+	const formSchema = Yup.object().shape({
+		email: Yup.string().required("Email is required"),
+		password: Yup.string().required("Password is required"),
 	});
 
 	const submitHandler = (data) => {
-		if (false) {
-		} else {
-			signInWithEmailAndPassword(auth, data.email, data.password)
-				.then((userCredential) => {
-					// Signed in
-					const user = userCredential.user;
+		signInWithEmailAndPassword(auth, data.email, data.password)
+			.then((userCredential) => {
+				// Signed in
+				const user = userCredential.user;
 
-					dispatch(
-						setUserLoginDetails({
-							email: user.email,
-						})
-					);
+				dispatch(
+					setUserLoginDetails({
+						email: user.email,
+					})
+				);
 
-					navigate("/");
-					// ...
-				})
-				.catch((error) => {
-					const errorCode = error.code;
-					const errorMessage = error.message;
-				});
-		}
+				navigate("/");
+				// ...
+			})
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+			});
 	};
 
 	return (
 		<Container>
 			<Wrap>
-				<form
-					onSubmit={handleSubmit((data) => {
-						submitHandler(data);
-					})}
+				<Form
+					defaultValues={{ email: "", password: "" }}
+					resolver={yupResolver(formSchema)}
+					onSubmit={submitHandler}
 				>
-					<input
-						{...register("email", {
-							required: "Email is required",
-						})}
-						placeholder="Email"
-						name="email"
-						type="email"
-					/>
-					<input
-						{...register("password", {
-							required: "Password is required",
-						})}
-						placeholder="Password"
-						name="password"
-						type="password"
-					/>
-					<button type="submit">Submit</button>
-				</form>
+					<Input name="email" placeholder="Email" type="email" />
+					<Input name="password" placeholder="password" type="password" />
+					<Button type="submit">Submit</Button>
+				</Form>
 				<LinkWrap>
 					<span>Don't have account?</span>
 					<Link to="/register">Register</Link>
@@ -79,14 +63,6 @@ const Login = () => {
 		</Container>
 	);
 };
-
-const Container = styled.div`
-	height: 100%;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	background: #234522;
-`;
 
 const Wrap = styled.div`
 	margin-top: 60px;
@@ -97,32 +73,6 @@ const Wrap = styled.div`
 	height: 500px;
 	background-color: #212125;
 	border-radius: 14px;
-
-	form {
-		background-color: #455442;
-		padding: 20px;
-		border-radius: 14px;
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
-
-		input {
-			padding: 4px;
-			font-size: 14px;
-			width: 100%;
-		}
-
-		button {
-			cursor: pointer;
-			border-radius: 8px;
-			border: none;
-			padding: 12px 14px;
-			background-color: #466422;
-			color: #fff;
-			font-size: 14px;
-			letter-spacing: 1.5px;
-		}
-	}
 `;
 
 const LinkWrap = styled.div`

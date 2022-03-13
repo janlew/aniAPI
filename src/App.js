@@ -1,9 +1,8 @@
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import styled from "styled-components";
 
 import { Counter } from "./features/counter/Counter";
-import ProtectedRoute from "./features/nav/ProtectedRoute";
+import ProtectedRoute from "./features/auth/ProtectedRoute";
 import Home from "./pages/Home";
 import Register from "./features/auth/register/Register";
 import Login from "./features/auth/login/Login";

@@ -11,7 +11,8 @@ const Header = (props) => {
 	const isAuth = useSelector(selectUserEmail);
 	const dispatch = useDispatch();
 
-	const handleLogOut = () => {
+	const handleLogOut = (e) => {
+		e.preventDefault();
 		signOut(auth)
 			.then(() => {
 				// Sign-out successful.
@@ -36,7 +37,9 @@ const Header = (props) => {
 				)}
 				<LinkWrap>
 					{isAuth ? (
-						<a onClick={() => handleLogOut()}>Logout</a>
+						<a href="/logout" onClick={(e) => handleLogOut(e)}>
+							Logout
+						</a>
 					) : (
 						<Link to="/login">Login</Link>
 					)}

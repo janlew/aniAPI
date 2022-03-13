@@ -1,105 +1,75 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 import { auth } from "../../../app/firebase";
 import { setUserLoginDetails } from "../userSlice";
 
+import Container from "../../ui/Container";
+import Button from "../../ui/Button";
+import Form from "../../form/Form";
+import Input from "../../form/components/Input";
+
 const Register = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		setError,
-		clearErrors,
-	} = useForm({
-		defaultValues: { email: "", password: "", password_confirm: "" },
+	const formSchema = Yup.object().shape({
+		email: Yup.string().required("Email is required"),
+		password: Yup.string()
+			.required("Password is required")
+			.min(6, "Password must be at least 6 characters long"),
+		password_confirm: Yup.string()
+			.required("Confirm password")
+			.oneOf([Yup.ref("password")], "Passwords does not match"),
 	});
 
 	const submitHandler = (data) => {
-		if (data.password !== data.password_confirm) {
-			setError("password", {
-				message: "Passwords must match!",
-			});
-		} else {
-			createUserWithEmailAndPassword(auth, data.email, data.password)
-				.then((userCredential) => {
-					// Signed in
-					const user = userCredential.user;
-					setUser(user);
-					// ...
-				})
-				.catch((error) => {
-					const errorCode = error.code;
-					const errorMessage = error.message;
-					// ..
-				});
-		}
-	};
+		createUserWithEmailAndPassword(auth, data.email, data.password)
+			.then((userCredential) => {
+				// Signed in
+				const user = userCredential.user;
 
-	const setUser = (user) => {
-		dispatch(
-			setUserLoginDetails({
-				email: user.email,
+				dispatch(
+					setUserLoginDetails({
+						email: user.email,
+					})
+				);
+
+				navigate("/");
+				// ...
 			})
-		);
+			.catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				// ..
+			});
 	};
 
 	return (
 		<Container>
 			<Wrap>
-				<form
-					onSubmit={handleSubmit((data) => {
-						submitHandler(data);
-					})}
+				<Form
+					defaultValues={{
+						email: "",
+						password: "",
+						password_confirm: "",
+					}}
+					resolver={yupResolver(formSchema)}
+					onSubmit={submitHandler}
 				>
-					<InputWrap className={errors?.email?.message ? "error" : ""}>
-						<input
-							{...register("email", {
-								required: "Email is required",
-							})}
-							placeholder="Email"
-							name="email"
-							type="email"
-							onFocus={() => clearErrors("email")}
-						/>
-						<span className="err-mess">{errors?.email?.message}</span>
-					</InputWrap>
-					<InputWrap className={errors?.password?.message ? "error" : ""}>
-						<input
-							{...register("password", {
-								required: "Password is required",
-							})}
-							placeholder="Password"
-							name="password"
-							type="password"
-							onFocus={() => clearErrors("password")}
-						/>
-						<span className="err-mess">{errors?.password?.message}</span>
-					</InputWrap>
-					<InputWrap
-						className={errors?.password_confirm?.message ? "error" : ""}
-					>
-						<input
-							{...register("password_confirm", {
-								required: "Confirm your password",
-							})}
-							placeholder="Confirm password"
-							name="password_confirm"
-							type="password"
-							onFocus={() => clearErrors("password_confirm")}
-						/>
-						<span className="err-mess">
-							{errors?.password_confirm?.message}
-						</span>
-					</InputWrap>
-					<button type="submit">Submit</button>
-				</form>
+					<Input name="email" placeholder="Email" type="email" />
+					<Input name="password" placeholder="Password" type="password" />
+					<Input
+						name="password_confirm"
+						placeholder="Confirm password"
+						type="password"
+					/>
+					<Button type="submit">Submit</Button>
+				</Form>
 
 				<LinkWrap>
 					<Link to="/login">Back to Login</Link>
@@ -109,13 +79,7 @@ const Register = () => {
 	);
 };
 
-const Container = styled.div`
-	height: 100%;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	background: #234522;
-`;
+// value === getValues("password") || "The passwords do not match"
 
 const Wrap = styled.div`
 	margin-top: 60px;
@@ -126,63 +90,6 @@ const Wrap = styled.div`
 	height: 500px;
 	background-color: #212125;
 	border-radius: 14px;
-
-	form {
-		background-color: #455442;
-		padding: 20px;
-		border-radius: 14px;
-		display: flex;
-		flex-direction: column;
-		gap: 20px;
-
-		button {
-			cursor: pointer;
-			border-radius: 8px;
-			border: none;
-			padding: 12px 14px;
-			background-color: #466422;
-			color: #fff;
-			font-size: 14px;
-			letter-spacing: 1.5px;
-		}
-	}
-`;
-
-const InputWrap = styled.div`
-	position: relative;
-
-	input {
-		padding: 4px;
-		font-size: 14px;
-		width: 100%;
-		border-radius: 8px;
-	}
-
-	span {
-		position: absolute;
-		font-size: 12px;
-		bottom: 9px;
-		right: 6px;
-		opacity: 0;
-		color: #fff;
-		line-height: 1;
-		transition: all 0.3s;
-	}
-
-	&.error {
-		input {
-			padding: 4px;
-			font-size: 14px;
-			width: 100%;
-			position: relative;
-			color: #fff;
-			background-color: rgba(204, 0, 0, 0.4);
-		}
-
-		span {
-			opacity: 1;
-		}
-	}
 `;
 
 const LinkWrap = styled.div`
