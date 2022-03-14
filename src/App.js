@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 import { auth } from "./app/firebase";
 import {
@@ -71,6 +72,7 @@ function App() {
 				<Route path="counter" element={<Counter />} />
 				<Route path="*" element={<NoMatch />} />
 			</Routes>
+			<ReactQueryDevtools initialIsOpen={true} />
 		</QueryClientProvider>
 	);
 }

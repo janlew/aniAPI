@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useQuery } from "react-query";
 
@@ -7,12 +7,21 @@ import aniAPI from "../../app/aniAPI";
 import Container from "../ui/Container";
 import Button from "../ui/Button";
 
+const useAnimeList = (page) => {
+	return useQuery("animes", async () => {
+		const { data } = await aniAPI.get(`/v1/anime?page=${page}`);
+		return data;
+	});
+};
+
 const AnimeList = () => {
 	const [animes, setAnimes] = useState([]);
 	const [page, setPage] = useState("1");
 
-	const { isLoading, error, data } = useQuery("repoData", async () => {
-		aniAPI.get(`/v1/anime?page=${page}`).then(({ data }) => {
+	const { data, error, isFetching, isLoading } = useAnimeList(page);
+
+	useEffect(() => {
+		if (data) {
 			const animeCards = data.data.documents.map(
 				({ anilist_id, cover_image, titles }) => {
 					return (
@@ -22,10 +31,9 @@ const AnimeList = () => {
 					);
 				}
 			);
-
 			setAnimes(animeCards);
-		});
-	});
+		}
+	}, [data]);
 
 	if (isLoading) return "Loading...";
 

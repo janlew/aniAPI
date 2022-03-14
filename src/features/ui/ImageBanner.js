@@ -15,7 +15,9 @@ const breatheAnimation = keyframes`
  100% { height: 100px;}
 `;
 
-const Wrap = styled.div``;
+const Wrap = styled.div`
+	width: 100%;
+`;
 
 const Banner = styled.div`
 	//height: 100%;
@@ -23,6 +25,7 @@ const Banner = styled.div`
 	//animation-name: ${breatheAnimation};
 	//animation-duration: 2s;
 	//animation-iteration-count: infinite;
+	width: 100%;
 
 	img {
 		height: 100%;

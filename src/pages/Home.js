@@ -8,18 +8,26 @@ import aniAPI from "../app/aniAPI";
 import Container from "../features/ui/Container";
 import ImageBanner from "../features/ui/ImageBanner";
 
+const useHomeBanner = () => {
+	return useQuery("home_anime", async () => {
+		const { data } = await aniAPI.get("v1/anime/11");
+		return data;
+	});
+};
+
 const Home = () => {
 	const [homeBannerImage, setHomeBannerImage] = useState("");
 
-	const { isLoading, error, data } = useQuery("repoData", async () => {
-		aniAPI.get("v1/anime/11").then(({ data }) => {
-			if (data.data.banner_image) {
-				setHomeBannerImage(data.data.banner_image);
-			}
-		});
-		// const { data } = await aniAPI.get("v1/anime/11");
-		// setHomeBannerImage(data.data.banner_image);
-	});
+	const { data, error, isFetching, isLoading } = useHomeBanner();
+
+	useEffect(() => {
+		if (data) {
+			setHomeBannerImage(data.data.banner_image);
+		}
+	}, [data]);
+
+	// const { data } = await aniAPI.get("v1/anime/11");
+	// setHomeBannerImage(data.data.banner_image);
 
 	if (isLoading) return "Loading...";
 
