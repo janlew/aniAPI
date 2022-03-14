@@ -1,53 +1,95 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import styled from "styled-components";
-import { useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 import aniAPI from "../../app/aniAPI";
+import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 
 import Container from "../ui/Container";
 import Button from "../ui/Button";
 
-const useAnimeList = (page) => {
-	return useQuery("animes", async () => {
-		const { data } = await aniAPI.get(`/v1/anime?page=${page}`);
-		return data;
-	});
+const useAnimeList = () => {
+	return useInfiniteQuery(
+		"animes",
+		async ({ pageParam = 1 }) => {
+			const { data } = await aniAPI.get(`/v1/anime?page=${pageParam}`);
+			return data;
+		},
+		{
+			getPreviousPageParam: (firstPage) => false,
+			getNextPageParam: (lastPage) => {
+				return lastPage.data.current_page + 1 < lastPage.data.last_page
+					? lastPage.data.current_page + 1
+					: false;
+			},
+		}
+	);
 };
 
 const AnimeList = () => {
 	const [animes, setAnimes] = useState([]);
-	const [page, setPage] = useState("1");
+	const loadMoreButtonRef = useRef();
 
-	const { data, error, isFetching, isLoading } = useAnimeList(page);
+	const {
+		status,
+		data,
+		error,
+		isLoading,
+		isFetching,
+		isFetchingNextPage,
+		isFetchingPreviousPage,
+		fetchNextPage,
+		fetchPreviousPage,
+		hasNextPage,
+		hasPreviousPage,
+	} = useAnimeList();
 
 	useEffect(() => {
 		if (data) {
-			const animeCards = data.data.documents.map(
-				({ anilist_id, cover_image, titles }) => {
-					return (
-						<AnimeCard key={anilist_id}>
-							<img src={cover_image} />
-						</AnimeCard>
-					);
-				}
-			);
-			setAnimes(animeCards);
+			const toRender = data.pages.map((page) => {
+				console.log(page);
+				return (
+					<Fragment key={`page-${page.data.current_page}-${Date.now()}`}>
+						{page.data.documents.map((anime) => {
+							return (
+								<AnimeCard key={anime.anilist_id}>
+									<img src={anime.cover_image} />
+								</AnimeCard>
+							);
+						})}
+					</Fragment>
+				);
+			});
+
+			setAnimes(toRender);
 		}
 	}, [data]);
 
-	if (isLoading) return "Loading...";
+	// if (isLoading) return "Loading...";
 
-	if (error) return "An error has occurred: " + error.message;
+	// if (error) return "An error has occurred: " + error.message;
 
-	const handleClickMore = () => {
-		console.log("first");
-	};
+	useIntersectionObserver({
+		target: loadMoreButtonRef,
+		onIntersect: fetchNextPage,
+		enabled: !!hasNextPage,
+	});
 
 	return (
 		<Container>
 			<Wrap>
 				<AnimesWrap>{animes}</AnimesWrap>
-				<Button onClick={handleClickMore}>More</Button>
+				<Button
+					innerRef={loadMoreButtonRef}
+					onClick={() => fetchNextPage()}
+					disabled={!hasNextPage || isFetchingNextPage}
+				>
+					{isFetchingNextPage
+						? "Loading more..."
+						: hasNextPage
+						? "Load more"
+						: "Nothing more to load"}
+				</Button>
 			</Wrap>
 		</Container>
 	);

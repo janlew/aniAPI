@@ -3,7 +3,11 @@ import styled from "styled-components";
 import * as style from "../../app/styled-variables";
 
 const Button = (props) => {
-	return <Btn {...props}>{props.children}</Btn>;
+	return (
+		<Btn {...props} ref={props.innerRef}>
+			{props.children}
+		</Btn>
+	);
 };
 
 const Btn = styled.button`
