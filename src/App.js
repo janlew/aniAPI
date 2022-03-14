@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 
 import { auth } from "./app/firebase";
 import {
@@ -17,8 +18,10 @@ import Register from "./features/auth/register/Register";
 import Login from "./features/auth/login/Login";
 import Header from "./features/nav/Header";
 import NoMatch from "./pages/NoMatch";
+import AnimeList from "./features/anime-list/AnimeList";
 
 //process.env.REACT_APP_NOT_SECRET_CODE
+const queryClient = new QueryClient();
 
 function App() {
 	const dispatch = useDispatch();
@@ -38,7 +41,7 @@ function App() {
 				);
 
 				navigate("/");
-				const uid = user.uid;
+				//const uid = user.uid;
 			} else {
 				// User is signed out
 				dispatch(setSignOutState());
@@ -47,9 +50,10 @@ function App() {
 	}, [isAuth]);
 
 	return (
-		<>
+		<QueryClientProvider client={queryClient}>
 			<Header isAuth={isAuth}>
 				<Link to="/">Home</Link>
+				<Link to="/anime-list">Anime List</Link>
 				<Link to="/counter">Counter</Link>
 			</Header>
 			<Routes>
@@ -63,10 +67,11 @@ function App() {
 				/>
 				<Route path="login" element={<Login />} />
 				<Route path="register" element={<Register />} />
+				<Route path="anime-list" element={<AnimeList />} />
 				<Route path="counter" element={<Counter />} />
 				<Route path="*" element={<NoMatch />} />
 			</Routes>
-		</>
+		</QueryClientProvider>
 	);
 }
 

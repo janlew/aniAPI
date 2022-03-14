@@ -1,5 +1,10 @@
 import styled from "styled-components";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+	setPersistence,
+	signInWithEmailAndPassword,
+	browserSessionPersistence,
+	browserLocalPersistence,
+} from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,8 +29,13 @@ const Login = () => {
 	});
 
 	const submitHandler = (data) => {
-		signInWithEmailAndPassword(auth, data.email, data.password)
-			.then((userCredential) => {
+		setPersistence(auth, browserLocalPersistence).then(async () => {
+			try {
+				const userCredential = await signInWithEmailAndPassword(
+					auth,
+					data.email,
+					data.password
+				);
 				// Signed in
 				const user = userCredential.user;
 
@@ -36,12 +46,11 @@ const Login = () => {
 				);
 
 				navigate("/");
-				// ...
-			})
-			.catch((error) => {
+			} catch (error) {
 				const errorCode = error.code;
 				const errorMessage = error.message;
-			});
+			}
+		});
 	};
 
 	return (
