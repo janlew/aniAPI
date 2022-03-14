@@ -12,7 +12,6 @@ const Home = () => {
 
 	useEffect(() => {
 		aniAPI.get("v1/anime/11").then((response) => {
-			console.log(response.data.data);
 			if (response.data.data.banner_image) {
 				setHomeBannerImage(response.data.data.banner_image);
 			}

@@ -1,11 +1,8 @@
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
-import { selectUserEmail } from "./userSlice";
+import { auth } from "../../app/firebase";
 
-const ProtectedRoute = ({ children }) => {
-	const isAuth = useSelector(selectUserEmail);
-
+const ProtectedRoute = ({ children, isAuth }) => {
 	if (!isAuth) {
 		return <Navigate to="/login" replace />;
 	}

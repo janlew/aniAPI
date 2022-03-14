@@ -1,15 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { signOut } from "firebase/auth";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 
 import * as style from "../../app/styled-variables";
-import { selectUserEmail, setSignOutState } from "../auth/userSlice";
+import { setSignOutState } from "../auth/userSlice";
 import { auth } from "../../app/firebase";
 
 const Header = (props) => {
-	const isAuth = useSelector(selectUserEmail);
 	const dispatch = useDispatch();
 
 	const handleLogOut = (e) => {
@@ -27,7 +26,7 @@ const Header = (props) => {
 	return (
 		<>
 			<Nav>
-				{isAuth ? (
+				{props.isAuth ? (
 					<ItemsWrap>
 						{props.children.map((child, i) => {
 							return <LinkWrap key={`headerItem-${i}`}>{child}</LinkWrap>;
@@ -37,7 +36,7 @@ const Header = (props) => {
 					<ItemsWrap></ItemsWrap>
 				)}
 				<LinkWrap>
-					{isAuth ? (
+					{props.isAuth ? (
 						<a href="/logout" onClick={(e) => handleLogOut(e)}>
 							Logout
 						</a>
