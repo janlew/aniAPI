@@ -10,7 +10,7 @@ const AnimeListSkeleton = () => {
 		const skeletonArr = [];
 		for (let i = 0; i < 100; i++) {
 			skeletonArr.push(
-				<AnimeCard>
+				<AnimeCard key={i + "-skeleton-anime"}>
 					<div>
 						<div></div>
 					</div>

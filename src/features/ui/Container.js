@@ -2,12 +2,8 @@ import styled from "styled-components";
 
 import * as style from "../../app/styled-variables";
 
-const Container = (props) => {
-	return <Body>{props.children}</Body>;
-};
-
-const Body = styled.div`
-	min-height: 100%;
+const Container = styled.div`
+	min-height: calc(100% - 60px);
 	width: 100%;
 	display: flex;
 	justify-content: center;

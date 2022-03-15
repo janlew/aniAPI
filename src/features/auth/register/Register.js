@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,6 +17,9 @@ import Input from "../../form/components/Input";
 const Register = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
+
+	const from = location.state?.from?.pathname || "/";
 
 	const formSchema = Yup.object().shape({
 		email: Yup.string().required("Email is required"),
@@ -40,7 +43,7 @@ const Register = () => {
 					})
 				);
 
-				navigate("/");
+				navigate(from, { replace: true });
 				// ...
 			})
 			.catch((error) => {

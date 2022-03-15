@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-	isAuth: false,
+	isAuth: undefined,
 	email: "",
 };
 
@@ -14,7 +14,7 @@ const userSlice = createSlice({
 			state.isAuth = action.payload.isAuth;
 		},
 		setSignOutState: (state) => {
-			state.email = null;
+			state.email = "";
 			state.isAuth = null;
 		},
 	},

@@ -5,7 +5,7 @@ import {
 	browserSessionPersistence,
 	browserLocalPersistence,
 } from "firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -22,6 +22,9 @@ import Input from "../../form/components/Input";
 const Login = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
+
+	const from = location.state?.from?.pathname || "/";
 
 	const formSchema = Yup.object().shape({
 		email: Yup.string().required("Email is required"),
@@ -45,7 +48,7 @@ const Login = () => {
 					})
 				);
 
-				navigate("/");
+				navigate(from, { replace: true });
 			} catch (error) {
 				const errorCode = error.code;
 				const errorMessage = error.message;

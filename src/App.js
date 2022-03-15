@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { onAuthStateChanged } from "firebase/auth";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -26,7 +26,6 @@ const queryClient = new QueryClient();
 
 function App() {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 	const isAuth = useSelector(selectIsAuth);
 
 	useEffect(() => {
@@ -40,8 +39,6 @@ function App() {
 						isAuth: true,
 					})
 				);
-
-				navigate("/");
 				//const uid = user.uid;
 			} else {
 				// User is signed out
@@ -59,6 +56,7 @@ function App() {
 			</Header>
 			<Routes>
 				<Route
+					index
 					path=""
 					element={
 						<ProtectedRoute isAuth={isAuth}>
@@ -68,8 +66,22 @@ function App() {
 				/>
 				<Route path="login" element={<Login />} />
 				<Route path="register" element={<Register />} />
-				<Route path="anime-list" element={<AnimeList />} />
-				<Route path="counter" element={<Counter />} />
+				<Route
+					path="anime-list"
+					element={
+						<ProtectedRoute isAuth={isAuth}>
+							<AnimeList />
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path="counter"
+					element={
+						<ProtectedRoute isAuth={isAuth}>
+							<Counter />
+						</ProtectedRoute>
+					}
+				/>
 				<Route path="*" element={<NoMatch />} />
 			</Routes>
 			<ReactQueryDevtools initialIsOpen={true} />
