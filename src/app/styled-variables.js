@@ -8,3 +8,5 @@ export const ERROR_RED = "#ff4d6d";
 export const BTN_COLOR = "#466422";
 
 export const HEADER_BG_COLOR = "#233423";
+
+export const GRAY = "#ced4da";

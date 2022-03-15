@@ -7,6 +7,7 @@ import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 
 import Container from "../ui/Container";
 import Button from "../ui/Button";
+import AnimeListSkeleton from "./components/AnimeListSkeleton";
 
 const useAnimeList = () => {
 	return useInfiniteQuery(
@@ -47,7 +48,6 @@ const AnimeList = () => {
 	useEffect(() => {
 		if (data) {
 			const toRender = data.pages.map((page) => {
-				console.log(page);
 				return (
 					<Fragment key={`page-${page.data.current_page}-${Date.now()}`}>
 						{page.data.documents.map((anime) => {
@@ -65,20 +65,24 @@ const AnimeList = () => {
 		}
 	}, [data]);
 
-	// if (isLoading) return "Loading...";
-
-	// if (error) return "An error has occurred: " + error.message;
-
 	useIntersectionObserver({
 		target: loadMoreButtonRef,
 		onIntersect: fetchNextPage,
 		enabled: !!hasNextPage,
 	});
 
+	if (error) return "An error has occurred: " + error.message;
+
 	return (
 		<Container>
 			<Wrap>
-				<AnimesWrap>{animes}</AnimesWrap>
+				<AnimesWrap>
+					{(isLoading || isFetching) && !isFetchingNextPage ? (
+						<AnimeListSkeleton />
+					) : (
+						animes
+					)}
+				</AnimesWrap>
 				<Button
 					innerRef={loadMoreButtonRef}
 					onClick={() => fetchNextPage()}
