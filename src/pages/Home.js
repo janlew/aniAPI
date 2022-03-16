@@ -10,7 +10,7 @@ import ImageBanner from "../features/ui/ImageBanner";
 
 const useHomeBanner = () => {
 	return useQuery("home_anime", async () => {
-		const { data } = await aniAPI.get("v1/anime/11");
+		const { data } = await aniAPI.get("/v1/anime/11");
 		return data;
 	});
 };

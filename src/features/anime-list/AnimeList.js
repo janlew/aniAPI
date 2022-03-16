@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import styled from "styled-components";
 import { useInfiniteQuery } from "react-query";
+import { Link } from "react-router-dom";
 
 import aniAPI from "../../app/aniAPI";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
@@ -53,7 +54,9 @@ const AnimeList = () => {
 						{page.data.documents.map((anime) => {
 							return (
 								<AnimeCard key={anime.anilist_id}>
-									<img src={anime.cover_image} />
+									<Link to={`/anime/${anime.id}`}>
+										<img src={anime.cover_image} />
+									</Link>
 								</AnimeCard>
 							);
 						})}

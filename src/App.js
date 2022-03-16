@@ -20,6 +20,7 @@ import Login from "./features/auth/login/Login";
 import Header from "./features/nav/Header";
 import NoMatch from "./pages/NoMatch";
 import AnimeList from "./features/anime-list/AnimeList";
+import Anime from "./features/single-anime/Anime";
 
 //process.env.REACT_APP_NOT_SECRET_CODE
 const queryClient = new QueryClient();
@@ -66,6 +67,14 @@ function App() {
 				/>
 				<Route path="login" element={<Login />} />
 				<Route path="register" element={<Register />} />
+				<Route
+					path="anime/:id"
+					element={
+						<ProtectedRoute isAuth={isAuth}>
+							<Anime />
+						</ProtectedRoute>
+					}
+				/>
 				<Route
 					path="anime-list"
 					element={
