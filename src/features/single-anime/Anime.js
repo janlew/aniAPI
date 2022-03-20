@@ -11,27 +11,10 @@ import {
 
 import aniAPI from "../../app/aniAPI";
 import Container from "../ui/Container";
-
-// const useAnime = () => {
-// 	return useInfiniteQuery(
-// 		"animes",
-// 		async ({ pageParam = 1 }) => {
-// 			const { data } = await aniAPI.get(`/v1/anime?page=${pageParam}`);
-// 			return data;
-// 		},
-// 		{
-// 			getPreviousPageParam: (firstPage) => false,
-// 			getNextPageParam: (lastPage) => {
-// 				return lastPage.data.current_page + 1 < lastPage.data.last_page
-// 					? lastPage.data.current_page + 1
-// 					: false;
-// 			},
-// 		}
-// 	);
-// };
-// const useAnimes = (select) => useQuery(["animes"], getAnimes, { select });
-// const useMovie = (id) =>
-// 	useAnimes((animes) => animes.find((anime) => anime.id === id));
+import Section from "../ui/Section";
+import AnimeBanner from "./components/AnimeBanner";
+import AnimeBar from "./components/AnimeBar";
+import Spinner from "../ui/Spinner";
 
 const useAnime = (id) => {
 	return useQuery(`anime_${id}`, async () => {
@@ -45,33 +28,63 @@ const Anime = () => {
 	const { data, error, isFetching, isLoading } = useAnime(params.id);
 	console.log(data);
 
+	if (isFetching || isLoading) {
+		return (
+			<Container>
+				<SpinnerWrap>
+					<Spinner />
+				</SpinnerWrap>
+			</Container>
+		);
+	}
+
 	return (
 		<ContainerExtended>
-			<h1>
-				{!isFetching && !isLoading ? (
-					Object.entries(data.data.titles).map(([key, value]) => (
-						<div>{value}</div>
-					))
-				) : (
-					<></>
-				)}
-			</h1>
-			<div>
-				{!isFetching && !isLoading ? (
-					Object.entries(data.data.descriptions).map(([key, value]) => (
-						<div>{value}</div>
-					))
-				) : (
-					<></>
-				)}
-			</div>
+			<Section noPadding>
+				<AnimeBanner src={data.data.banner_image} />
+				<AnimeBar
+					title={data.data.titles[Object.keys(data.data.titles)[0]]}
+				></AnimeBar>
+			</Section>
+			{/* <Section>
+				<h1>
+					{Object.entries(data.data.titles).map(([key, value]) => (
+						<div key={key}>{value}</div>
+					))}
+				</h1>
+			</Section> */}
+			<Section>
+				{/* <div>
+					{Object.entries(data.data.descriptions).map(([key, value]) => (
+						<div key={key}>{value}</div>
+					))}
+				</div> */}
+				<div>
+					<p
+						dangerouslySetInnerHTML={{
+							__html:
+								data.data.descriptions[Object.keys(data.data.descriptions)[0]],
+						}}
+					>
+						{}
+					</p>
+				</div>
+			</Section>
 		</ContainerExtended>
 	);
 };
 
 const ContainerExtended = styled(Container)`
 	align-items: center;
+	justify-content: flex-start;
 	flex-direction: column;
+	gap: 0;
+`;
+
+const SpinnerWrap = styled.div`
+	height: 100vh - 60px;
+	display: flex;
+	align-items: center;
 `;
 
 export default Anime;

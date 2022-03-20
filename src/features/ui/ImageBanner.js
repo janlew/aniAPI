@@ -1,9 +1,11 @@
 import styled, { keyframes } from "styled-components";
 
-const ImageBanner = ({ src }) => {
+const ImageBanner = ({ src, alt }) => {
 	return (
 		<Wrap>
-			<Banner>{src ? <img src={`${src}`} alt="" /> : <Placeholder />}</Banner>
+			<Banner>
+				{src ? <img src={`${src}`} alt={`${alt}`} /> : <Placeholder />}
+			</Banner>
 		</Wrap>
 	);
 };
