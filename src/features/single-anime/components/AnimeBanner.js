@@ -24,7 +24,7 @@ const AnimeBanner = ({ src, alt }) => {
 	return (
 		<Container ratio={(imgHeight / imgWidth) * 100}>
 			<img
-				className={!loaded ? "" : "hidden"}
+				className={loaded ? "" : "hidden"}
 				ref={ref}
 				onLoad={onLoad}
 				src={`${src}`}
@@ -34,7 +34,7 @@ const AnimeBanner = ({ src, alt }) => {
 			<ShinePlaceholder
 				duration="5s"
 				animationWidth="100vw"
-				className={!loaded ? "hidden" : ""}
+				className={loaded ? "hidden" : ""}
 			></ShinePlaceholder>
 		</Container>
 	);
