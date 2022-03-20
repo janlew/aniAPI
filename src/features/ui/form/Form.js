@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 
-import * as style from "../../app/styled-variables";
+import * as style from "../../../app/styled-variables";
 
 const Form = ({ defaultValues, resolver, children, onSubmit }) => {
 	const methods = useForm({

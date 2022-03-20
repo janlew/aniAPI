@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { signOut, onAuthStateChanged } from "firebase/auth";
+import { signOut } from "firebase/auth";
 
-import * as style from "../../app/styled-variables";
-import { setSignOutState } from "../auth/userSlice";
-import { auth } from "../../app/firebase";
+import * as style from "../../../app/styled-variables";
+import { setSignOutState } from "../../auth/userSlice";
+import { auth } from "../../../app/firebase";
 
 const Header = (props) => {
 	const dispatch = useDispatch();

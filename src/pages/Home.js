@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import aniAPI from "../app/aniAPI";
 
 import Container from "../features/ui/Container";
-import ImageBanner from "../features/ui/ImageBanner";
+import FavBanner from "../features/user-homepage/FavBanner";
 
 const useHomeBanner = () => {
 	return useQuery("home_anime", async () => {
@@ -16,24 +16,25 @@ const useHomeBanner = () => {
 };
 
 const Home = () => {
-	const [homeBannerImage, setHomeBannerImage] = useState("");
+	const [favBannerImages, setFavBannerImages] = useState("");
+	const [favAnimeId, setFavAnimeId] = useState("");
 
 	const { data, error, isFetching, isLoading } = useHomeBanner();
 
 	useEffect(() => {
 		if (data) {
-			setHomeBannerImage(data.data.banner_image);
+			setFavAnimeId(data.data.id);
+			setFavBannerImages(data.data.banner_image);
 		}
 	}, [data]);
 
-	// const { data } = await aniAPI.get("v1/anime/11");
-	// setHomeBannerImage(data.data.banner_image);
-
-	if (isLoading) return "Loading...";
+	if (isLoading || isFetching) {
+		return "Loading...";
+	}
 
 	return (
 		<Container>
-			<ImageBanner src={homeBannerImage} />
+			<FavBanner src={favBannerImages} animeId={favAnimeId} />
 		</Container>
 	);
 };

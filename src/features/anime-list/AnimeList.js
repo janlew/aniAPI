@@ -7,7 +7,7 @@ import aniAPI from "../../app/aniAPI";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 
 import Container from "../ui/Container";
-import Button from "../ui/Button";
+import Button from "../ui/components/Button";
 import AnimeListSkeleton from "./components/AnimeListSkeleton";
 
 const useAnimeList = () => {

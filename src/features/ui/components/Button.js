@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import * as style from "../../app/styled-variables";
+import * as style from "../../../app/styled-variables";
 
 const Button = (props) => {
 	return (

@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-import * as style from "../../../app/styled-variables";
+import * as style from "../../../../app/styled-variables";
 
 const Input = ({ register, name, rules, errors, ...rest }) => {
 	return (

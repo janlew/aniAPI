@@ -17,10 +17,10 @@ import ProtectedRoute from "./features/auth/ProtectedRoute";
 import Home from "./pages/Home";
 import Register from "./features/auth/register/Register";
 import Login from "./features/auth/login/Login";
-import Header from "./features/nav/Header";
+import Header from "./features/ui/nav/Header";
 import NoMatch from "./pages/NoMatch";
 import AnimeList from "./features/anime-list/AnimeList";
-import Anime from "./features/single-anime/Anime";
+import Anime from "./features/anime/Anime";
 
 //process.env.REACT_APP_NOT_SECRET_CODE
 const queryClient = new QueryClient();

@@ -35,12 +35,13 @@ const AnimeBanner = ({ src, alt }) => {
 				duration="5s"
 				animationWidth="100vw"
 				className={loaded ? "hidden" : ""}
-			></ShinePlaceholder>
+			/>
 		</Container>
 	);
 };
 
 const Container = styled.div`
+	height: 0;
 	width: 100%;
 	position: relative;
 	margin: 0;

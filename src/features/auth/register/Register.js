@@ -10,9 +10,9 @@ import { auth } from "../../../app/firebase";
 import { setUserLoginDetails } from "../userSlice";
 
 import Container from "../../ui/Container";
-import Button from "../../ui/Button";
-import Form from "../../form/Form";
-import Input from "../../form/components/Input";
+import Button from "../../ui/components/Button";
+import Form from "../../ui/form/Form";
+import Input from "../../ui/form/components/Input";
 
 const Register = () => {
 	const dispatch = useDispatch();
