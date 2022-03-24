@@ -31,6 +31,8 @@ const useAnimeList = () => {
 	);
 };
 
+// TODO poczekać na załadowanie img + lazyload, wyłączać load more na searchu
+
 const AnimeList = () => {
 	const [searchVal, setSearchVal] = useState("");
 	const [animes, setAnimes] = useState([]);
@@ -131,6 +133,10 @@ const Wrap = styled.div`
 	flex-direction: column;
 	align-items: center;
 	gap: 40px;
+
+	@media only screen and (max-width: 639px) {
+		padding: 0 20px 20px;
+	}
 `;
 
 const AnimesWrap = styled.div`

@@ -13,14 +13,18 @@ const AnimeBar = ({ title }) => {
 
 const Container = styled.div`
 	width: 100%;
-	height: 80px;
+	min-height: 80px;
 	background-color: ${style.BOX_BG_COLOR};
 	display: flex;
 	align-items: center;
-	padding: 0 20px;
+	padding: 0 60px;
 
 	h1 {
 		margin: 0;
+	}
+
+	@media only screen and (max-width: 639px) {
+		padding: 0 20px;
 	}
 `;
 

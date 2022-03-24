@@ -10,6 +10,7 @@ import { auth } from "../../../app/firebase";
 import { setUserLoginDetails } from "../userSlice";
 
 import Container from "../../ui/Container";
+import Section from "../../ui/Section";
 import Button from "../../ui/components/Button";
 import Form from "../../ui/form/Form";
 import Input from "../../ui/form/components/Input";
@@ -55,30 +56,32 @@ const Register = () => {
 
 	return (
 		<Container>
-			<Wrap>
-				<Form
-					defaultValues={{
-						email: "",
-						password: "",
-						password_confirm: "",
-					}}
-					resolver={yupResolver(formSchema)}
-					onSubmit={submitHandler}
-				>
-					<Input name="email" placeholder="Email" type="email" />
-					<Input name="password" placeholder="Password" type="password" />
-					<Input
-						name="password_confirm"
-						placeholder="Confirm password"
-						type="password"
-					/>
-					<Button type="submit">Submit</Button>
-				</Form>
+			<Section>
+				<Wrap>
+					<Form
+						defaultValues={{
+							email: "",
+							password: "",
+							password_confirm: "",
+						}}
+						resolver={yupResolver(formSchema)}
+						onSubmit={submitHandler}
+					>
+						<Input name="email" placeholder="Email" type="email" />
+						<Input name="password" placeholder="Password" type="password" />
+						<Input
+							name="password_confirm"
+							placeholder="Confirm password"
+							type="password"
+						/>
+						<Button type="submit">Submit</Button>
+					</Form>
 
-				<LinkWrap>
-					<Link to="/login">Back to Login</Link>
-				</LinkWrap>
-			</Wrap>
+					<LinkWrap>
+						<Link to="/login">Back to Login</Link>
+					</LinkWrap>
+				</Wrap>
+			</Section>
 		</Container>
 	);
 };
@@ -94,6 +97,11 @@ const Wrap = styled.div`
 	height: 500px;
 	background-color: ${style.WRAP_BG_COLOR};
 	border-radius: 14px;
+
+	@media only screen and (max-width: 639px) {
+		margin-top: 20px;
+		padding: 20px;
+	}
 `;
 
 const LinkWrap = styled.div`

@@ -28,7 +28,7 @@ const Bar = styled.div`
 		content: "";
 		position: absolute;
 		height: 100%;
-		width: 100vw;
+		width: calc(100vw + 80px);
 		top: 0;
 		left: -80px;
 		background-color: ${style.BOX_BG_COLOR};

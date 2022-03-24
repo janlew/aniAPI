@@ -45,6 +45,7 @@ const FavBanner = ({ src, alt, animeId }) => {
 };
 
 const Container = styled.div`
+	min-height: 160px;
 	height: 0;
 	width: 100%;
 	position: relative;
@@ -60,6 +61,7 @@ const Container = styled.div`
 		height: 100%;
 		width: 100%;
 		border: 3px solid transparent;
+		object-fit: cover;
 		transition: all 0.3s ease-in-out;
 
 		&.hidden {

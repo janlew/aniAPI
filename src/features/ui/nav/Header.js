@@ -61,7 +61,11 @@ const Nav = styled.nav`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 0 46px;
+	padding: 0 60px;
+
+	@media only screen and (max-width: 639px) {
+		padding: 0 20px;
+	}
 `;
 
 const ItemsWrap = styled.div`

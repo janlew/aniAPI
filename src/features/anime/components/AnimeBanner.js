@@ -41,6 +41,7 @@ const AnimeBanner = ({ src, alt }) => {
 };
 
 const Container = styled.div`
+	min-height: 160px;
 	height: 0;
 	width: 100%;
 	position: relative;
@@ -55,6 +56,7 @@ const Container = styled.div`
 		padding: 0;
 		height: 100%;
 		width: 100%;
+		object-fit: cover;
 
 		&.hidden {
 			display: none;
