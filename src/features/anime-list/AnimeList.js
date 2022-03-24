@@ -50,7 +50,7 @@ const AnimeList = () => {
 		hasPreviousPage,
 	} = useAnimeList();
 
-	const animeData = useAnimeListDisplay({ data, isLoading });
+	let animeData = useAnimeListDisplay({ data, isLoading });
 
 	useEffect(() => {
 		setAnimes(animeData);

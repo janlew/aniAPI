@@ -19,7 +19,7 @@ export default function useAnimeListDisplay({ data, isLoading }) {
 
 			setAnimes(toRender);
 		}
-	}, [isLoading]);
+	}, [isLoading, data]);
 
 	return animes;
 }
