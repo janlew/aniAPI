@@ -14,7 +14,7 @@ import Container from "../ui/Container";
 import Section from "../ui/Section";
 import AnimeBanner from "./components/AnimeBanner";
 import AnimeBar from "./components/AnimeBar";
-import Spinner from "../ui/Spinner";
+import Loader from "../loader/Loader";
 
 const useAnime = (id) => {
 	return useQuery(`anime_${id}`, async () => {
@@ -29,13 +29,7 @@ const Anime = () => {
 	console.log(data);
 
 	if (isFetching || isLoading) {
-		return (
-			<Container>
-				<SpinnerWrap>
-					<Spinner />
-				</SpinnerWrap>
-			</Container>
-		);
+		return <Loader />;
 	}
 
 	return (
@@ -79,12 +73,6 @@ const ContainerExtended = styled(Container)`
 	justify-content: flex-start;
 	flex-direction: column;
 	gap: 0;
-`;
-
-const SpinnerWrap = styled.div`
-	height: 100vh - 60px;
-	display: flex;
-	align-items: center;
 `;
 
 export default Anime;

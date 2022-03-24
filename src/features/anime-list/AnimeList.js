@@ -5,10 +5,13 @@ import { Link } from "react-router-dom";
 
 import aniAPI from "../../app/aniAPI";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
+import useAnimeListDisplay from "./hooks/useAnimeListDisplay";
 
 import Container from "../ui/Container";
 import Button from "../ui/components/Button";
 import AnimeListSkeleton from "./components/AnimeListSkeleton";
+import AnimeCard from "./components/AnimeCard";
+import SearchBar from "./components/SearchBar";
 
 const useAnimeList = () => {
 	return useInfiniteQuery(
@@ -29,6 +32,7 @@ const useAnimeList = () => {
 };
 
 const AnimeList = () => {
+	const [searchVal, setSearchVal] = useState("");
 	const [animes, setAnimes] = useState([]);
 	const loadMoreButtonRef = useRef();
 
@@ -46,27 +50,41 @@ const AnimeList = () => {
 		hasPreviousPage,
 	} = useAnimeList();
 
+	const animeData = useAnimeListDisplay({ data, isLoading });
+
+	useEffect(() => {
+		setAnimes(animeData);
+	}, [animeData]);
+
 	useEffect(() => {
 		if (data) {
-			const toRender = data.pages.map((page) => {
-				return (
-					<Fragment key={`page-${page.data.current_page}-${Date.now()}`}>
-						{page.data.documents.map((anime) => {
-							return (
-								<AnimeCard key={anime.anilist_id}>
-									<Link to={`/anime/${anime.id}`}>
-										<img src={anime.cover_image} />
-									</Link>
-								</AnimeCard>
-							);
-						})}
-					</Fragment>
-				);
-			});
+			let newData = [];
 
-			setAnimes(toRender);
+			if (searchVal.length > 0) {
+				data.pages.forEach((page) => {
+					const temp = page.data.documents.filter((doc) => {
+						const currentTitleArr = doc.titles.rj;
+						return currentTitleArr
+							.toLowerCase()
+							.trim()
+							.includes(searchVal.toLowerCase().trim());
+					});
+					newData = newData.concat(temp);
+				});
+				const toRender = newData.map((anime) => {
+					return <AnimeCard key={anime.anilist_id} anime={anime} />;
+				});
+
+				setAnimes(toRender);
+			} else {
+				setAnimes(animeData);
+			}
 		}
-	}, [data]);
+	}, [searchVal]);
+
+	const onSearch = (e) => {
+		setSearchVal(e.target.value);
+	};
 
 	useIntersectionObserver({
 		target: loadMoreButtonRef,
@@ -79,24 +97,27 @@ const AnimeList = () => {
 	return (
 		<Container>
 			<Wrap>
-				<AnimesWrap>
-					{(isLoading || isFetching) && !isFetchingNextPage ? (
+				<SearchBar onChange={onSearch} />
+				{(isLoading || isFetching) && !isFetchingNextPage ? (
+					<AnimesWrap>
 						<AnimeListSkeleton />
-					) : (
-						animes
-					)}
-				</AnimesWrap>
-				<Button
-					innerRef={loadMoreButtonRef}
-					onClick={() => fetchNextPage()}
-					disabled={!hasNextPage || isFetchingNextPage}
-				>
-					{isFetchingNextPage
-						? "Loading more..."
-						: hasNextPage
-						? "Load more"
-						: "Nothing more to load"}
-				</Button>
+					</AnimesWrap>
+				) : (
+					<>
+						<AnimesWrap>{animes}</AnimesWrap>
+						<Button
+							innerRef={loadMoreButtonRef}
+							onClick={() => fetchNextPage()}
+							disabled={!hasNextPage || isFetchingNextPage}
+						>
+							{isFetchingNextPage
+								? "Loading more..."
+								: hasNextPage
+								? "Load more"
+								: "Nothing more to load"}
+						</Button>
+					</>
+				)}
 			</Wrap>
 		</Container>
 	);
@@ -105,7 +126,7 @@ const AnimeList = () => {
 const Wrap = styled.div`
 	width: 100%;
 	height: 100%;
-	padding: 60px 80px;
+	padding: 0 60px 80px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -119,14 +140,6 @@ const AnimesWrap = styled.div`
 	justify-content: center;
 	flex-wrap: wrap;
 	gap: 20px;
-`;
-
-const AnimeCard = styled.div`
-	min-width: calc(100% / 5 - 20px * 4 / 5);
-	img {
-		height: 100%;
-		width: 100%;
-	}
 `;
 
 export default AnimeList;

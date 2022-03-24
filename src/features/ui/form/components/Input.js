@@ -26,7 +26,7 @@ const InputWrap = styled.div`
 
 	input {
 		position: relative;
-		padding: 6px 4px;
+		padding: 6px 8px;
 		font-size: 14px;
 		width: 100%;
 		border: none;

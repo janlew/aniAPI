@@ -53,7 +53,6 @@ function App() {
 			<Header isAuth={isAuth}>
 				<Link to="/">Home</Link>
 				<Link to="/anime-list">Anime List</Link>
-				<Link to="/counter">Counter</Link>
 			</Header>
 			<Routes>
 				<Route

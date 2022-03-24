@@ -7,6 +7,7 @@ import aniAPI from "../app/aniAPI";
 
 import Container from "../features/ui/Container";
 import FavBanner from "../features/user-homepage/FavBanner";
+import Loader from "../features/loader/Loader";
 
 const useHomeBanner = () => {
 	return useQuery("home_anime", async () => {
@@ -29,7 +30,7 @@ const Home = () => {
 	}, [data]);
 
 	if (isLoading || isFetching) {
-		return "Loading...";
+		return <Loader />;
 	}
 
 	return (
