@@ -7,7 +7,8 @@ const AnimeCard = ({ anime }) => {
 			<Link to={`/anime/${anime.id}`}>
 				<img src={anime.cover_image} />
 			</Link>
-			<span>{anime.titles.rj}</span>
+			<span style={{ opacity: "0.1" }}>{anime.titles.rj}</span>
+			<span>{anime.anilist_id}</span>
 		</Wrap>
 	);
 };

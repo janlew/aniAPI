@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, Fragment } from "react";
 import styled from "styled-components";
-import { useInfiniteQuery } from "react-query";
 import { Link } from "react-router-dom";
 
-import aniAPI from "../../app/aniAPI";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
+import useAnimeList from "./hooks/useAnimeList";
 import useAnimeListDisplay from "./hooks/useAnimeListDisplay";
 
 import Container from "../ui/Container";
@@ -13,28 +12,10 @@ import AnimeListSkeleton from "./components/AnimeListSkeleton";
 import AnimeCard from "./components/AnimeCard";
 import SearchBar from "./components/SearchBar";
 
-const useAnimeList = () => {
-	return useInfiniteQuery(
-		"animes",
-		async ({ pageParam = 1 }) => {
-			const { data } = await aniAPI.get(`/v1/anime?page=${pageParam}`);
-			return data;
-		},
-		{
-			getPreviousPageParam: (firstPage) => false,
-			getNextPageParam: (lastPage) => {
-				return lastPage.data.current_page + 1 < lastPage.data.last_page
-					? lastPage.data.current_page + 1
-					: false;
-			},
-		}
-	);
-};
-
 // TODO poczekać na załadowanie img + lazyload, wyłączać load more na searchu
 
 const AnimeList = () => {
-	const [searchVal, setSearchVal] = useState("");
+	const [moreButtonVisibility, setMoreButtonVisibility] = useState(false);
 	const [animes, setAnimes] = useState([]);
 	const loadMoreButtonRef = useRef();
 
@@ -58,20 +39,27 @@ const AnimeList = () => {
 		setAnimes(animeData);
 	}, [animeData]);
 
-	useEffect(() => {
+	const onSearch = (e) => {
 		if (data) {
 			let newData = [];
 
-			if (searchVal.length > 0) {
+			if (e.target.value.length > 0) {
+				setMoreButtonVisibility(true);
 				data.pages.forEach((page) => {
 					const temp = page.data.documents.filter((doc) => {
 						const currentTitleArr = doc.titles.rj;
 						return currentTitleArr
 							.toLowerCase()
 							.trim()
-							.includes(searchVal.toLowerCase().trim());
+							.includes(e.target.value.toLowerCase().trim());
 					});
 					newData = newData.concat(temp);
+					// unique data as API returns duplicates
+					newData = [
+						...new Map(
+							newData.map((item) => [item["anilist_id"], item])
+						).values(),
+					];
 				});
 				const toRender = newData.map((anime) => {
 					return <AnimeCard key={anime.anilist_id} anime={anime} />;
@@ -79,13 +67,10 @@ const AnimeList = () => {
 
 				setAnimes(toRender);
 			} else {
+				setMoreButtonVisibility(false);
 				setAnimes(animeData);
 			}
 		}
-	}, [searchVal]);
-
-	const onSearch = (e) => {
-		setSearchVal(e.target.value);
 	};
 
 	useIntersectionObserver({
@@ -108,6 +93,7 @@ const AnimeList = () => {
 					<>
 						<AnimesWrap>{animes}</AnimesWrap>
 						<Button
+							className={moreButtonVisibility === true ? "hidden" : ""}
 							innerRef={loadMoreButtonRef}
 							onClick={() => fetchNextPage()}
 							disabled={!hasNextPage || isFetchingNextPage}
@@ -133,6 +119,10 @@ const Wrap = styled.div`
 	flex-direction: column;
 	align-items: center;
 	gap: 40px;
+
+	button.hidden {
+		display: none;
+	}
 
 	@media only screen and (max-width: 639px) {
 		padding: 0 20px 20px;
